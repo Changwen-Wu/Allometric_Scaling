@@ -51,9 +51,6 @@ function Results = gretna_allometric_scaling(X_subcomponent, X_global, Beta_pred
 %     in Health and Schizophrenia. Journal of Neuroscience, 42:3704-3715.
 %  3. Im et al., (2008) Brain Size and Cortical Structure in the Adult
 %     Human Brain. Cerebral Cortex, 18:2181--2191.
-%
-% Jiashun Zhang, IBRR, SCNU, Guangzhou, 2025/3/25, 2024024661@m.scnu.edu.cn
-% Jinhui Wang, IBRR, SCNU, Guangzhou, 2025/3/25, jinhui.Wang.1982@gmail.com
 %==========================================================================
 
 Num_subs = size(X_global,1);
@@ -65,10 +62,6 @@ end
 if nargin == 4
     if size(Covariates,1) ~= Num_subs
         error('The number of subjects are not equal between ''X_global'' and ''Covariates''!');
-    end
-    
-    if size(Covariates,1) ~=  size(X_subcomponent,1)
-        error('The number of subjects are not equal between ''X_subcomponent'' and ''Covariates''!');
     end
 end
 

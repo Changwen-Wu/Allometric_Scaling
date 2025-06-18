@@ -1,2 +1,2 @@
 # Allometric_Scaling
-Calculate scaling coefficient for brain metrics
+Codes for <<Normative allometric scaling law of brain networks in humans>>

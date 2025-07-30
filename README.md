@@ -1,2 +1,2 @@
 # Allometric_Scaling
-Codes for "Normative allometric scaling law of brain networks in humans"
+Codes for "Connectivity scaling law of human brain networks"

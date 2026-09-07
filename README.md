@@ -2,7 +2,8 @@
 
 Code and data for **Connectivity Allometry of Functional Brain Networks**. 
 
-All relevant data (including HCP unrelated subjects and SLEM test-retest subjects) can be found directly in the **"Data"** directory.
+The [data](Data/) folder contains all the data used to run the analyses.
+If you use any of the neurobiological data, please cite [Hansen et al., 2022](https://www.nature.com/articles/s41593-022-01186-3) and [Markello et al., 2022](https://www.nature.com/articles/s41592-022-01625-w).
 
 ---
 **Institute for Brain Research and Rehabilitation, South China Normal University, Guangzhou, China**

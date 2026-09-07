@@ -10,9 +10,8 @@ activation_score = table2array(neurosynth_tbl(:,2:end));
 terms = neurosynth_tbl.Properties.VariableNames(2:end);
 
 mode = {'SC', 'FC', 'GMV'};
-mode = {'FC'}
-P = zeros(length(mode),size(activation_score,2));
-R = zeros(length(mode),size(activation_score,2));
+P = zeros(3,size(activation_score,2));
+R = zeros(3,size(activation_score,2));
 
 thr = zeros(1,length(mode));
 

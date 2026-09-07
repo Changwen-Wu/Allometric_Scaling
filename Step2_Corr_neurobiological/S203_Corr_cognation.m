@@ -9,9 +9,10 @@ neurosynth_tbl = readtable("Data\Neurosynth\atl-schaefer2018_res-400_neurosynth.
 activation_score = table2array(neurosynth_tbl(:,2:end));
 terms = neurosynth_tbl.Properties.VariableNames(2:end);
 
-mode = {'SC', 'FC', 'GMV'};
-P = zeros(3,size(activation_score,2));
-R = zeros(3,size(activation_score,2));
+% mode = {'SC', 'FC', 'GMV'};
+mode = {'FC'};
+P = zeros(length(mode),size(activation_score,2));
+R = zeros(length(mode),size(activation_score,2));
 
 thr = zeros(1,length(mode));
 
@@ -32,7 +33,7 @@ end
 
 save Result\S203_Corr_cognation\corr_cognation_hcp.mat P R thr terms
 
-fc_p = P(2,:); fc_r = R(2,:); fc_thr = thr(2);
+fc_p = P; fc_r = R; fc_thr = thr;
 sig_pos_term = terms(and(fc_p<=fc_thr, fc_r>0)); sig_pos_r = fc_r(and(fc_p<=fc_thr, fc_r>0));
 sig_neg_term = terms(and(fc_p<=fc_thr, fc_r<0)); sig_neg_r = fc_r(and(fc_p<=fc_thr, fc_r<0));
 [sig_pos_r,seq] = sort(sig_pos_r); sig_pos_term = sig_pos_term(seq);

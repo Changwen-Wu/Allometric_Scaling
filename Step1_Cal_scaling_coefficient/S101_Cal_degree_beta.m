@@ -1,24 +1,22 @@
 clear; clc;
-cd D:\Projects\Allo_Scaling\
+cd E:\Projects\Allo_Scaling\Step1_Cal_beta
 
 Roi_num = 400;
 sub_num = 413;
 
-load Data\Networks\HCP\sub_info.mat
-volume_list =  dir('Data\Networks\HCP\SCN_volume\*7.txt');
-
-filelist.SC = dir('Data\Networks\HCP\SCN_origin\*.mat');
-filelist.FC = dir('Data\Networks\HCP\FCN\*.mat');
-filelist.GMV = dir('Data\Networks\HCP\MCN\*.mat');
+load Data\sub_info.mat
+% volume_list =  dir('Data\Networks\HCP\SCN_volume\*7.txt');
+% filelist.SC = dir('Data\Networks\HCP\SCN_origin\*.mat');
+filelist.FC = dir('Data\Networks\FC\*.mat');
+% filelist.GMV = dir('Data\Networks\HCP\MCN\*.mat');
 
 net_names = fieldnames(filelist);
 
 beta_all = {};
 
-[~,temp,~] = gretna_read_image('Data\Template\Schaefer_400_7Net_MNI152_3mm.nii');
+[~,temp,~] = gretna_read_image('Data\Schaefer_400_7Net_MNI152_3mm.nii');
 
-
-
+nets = zeros(sub_num,Roi_num,Roi_num);
 
 for inet = 1 : length(net_names)
     tic
@@ -47,12 +45,14 @@ for inet = 1 : length(net_names)
             network = file.(tmp{1});
         end
 
-        if inet==1
-            volume_effect = load(fullfile(volume_list(isub).folder, volume_list(isub).name));
-            volume_effect = (volume_effect(:,1) + volume_effect(:,1)')/2;
-        end
+        % if inet==1
+        %     volume_effect = load(fullfile(volume_list(isub).folder, volume_list(isub).name));
+        %     volume_effect = (volume_effect(:,1) + volume_effect(:,1)')/2;
+        % end
  
         network = network ./ volume_effect;
+        
+        nets(isub,:,:) = network;
 
         degree_Glo(isub) = sum(network(:)); degree(:,isub) = sum(network);
     end
@@ -81,13 +81,13 @@ for inet = 1 : length(net_names)
         Y = Y(~inf_ind); X = X(~inf_ind);
         [b,bint,~,~,~] = regress(Y,[X,age(~inf_ind),gender(~inf_ind),age(~inf_ind).*gender(~inf_ind),ones(sum(~inf_ind),1)]);
         
-%         % 提取回归系数和标准误差
-%         b_SE = (bint(:,2) - bint(:,1)) / (2 * 1.96); % 计算标准误差（假设 95% 置信区间）
-%         t_values = b ./ b_SE; % 计算 t 统计量
-%         p_values = 2 * (1 - tcdf(abs(t_values), length(Y) - size(X, 2))); % 计算双尾 p 值
-% 
-%         result.beta(iroi) = b(1);
-%         result.cov_eff(:,iroi) = p_values(2:4);
+        % 提取回归系数和标准误差
+        b_SE = (bint(:,2) - bint(:,1)) / (2 * 1.96); % 计算标准误差（假设 95% 置信区间）
+        t_values = b ./ b_SE; % 计算 t 统计量
+        p_values = 2 * (1 - tcdf(abs(t_values), length(Y) - size(X, 2))); % 计算双尾 p 值
+
+        result.beta(iroi) = b(1);
+        result.cov_eff(:,iroi) = p_values(2:4);
 
         boot_beta = bootstrp(10000, @bootstrapFun, Y, X, age(~inf_ind), gender(~inf_ind));
 
@@ -111,15 +111,8 @@ save Data\Beta\beta_deg_hcp.mat beta_all
 
 
 function coefficients = bootstrapFun(Y, X, age, gender)
-    % 在 Bootstrap 函数中重新拟合线性模型并返回回归系数
-
-    % 添加截距项到自变量矩阵 X
     X = [X, age, gender, age .* gender, ones(length(Y), 1)];
-
-    % 使用 regress 函数进行线性回归
     b = regress(Y, X);
-
-    % 返回回归系数中的第一个系数（例如您需要的 beta）
     coefficients = b(1);
 end
 

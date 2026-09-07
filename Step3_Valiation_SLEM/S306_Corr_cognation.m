@@ -1,4 +1,4 @@
-cd D:\Projects\Allo_Scaling
+cd E:\Projects\Allo_Scaling
 
 load Data\Beta\beta_deg_slem.mat
 load Data\Spin_rotation\Schaefer400_rotation.mat
@@ -10,12 +10,13 @@ activation_score = table2array(neurosynth_tbl(:,2:end));
 terms = neurosynth_tbl.Properties.VariableNames(2:end);
 
 mode = {'SC', 'FC', 'GMV'};
-P = zeros(3,size(activation_score,2));
-R = zeros(3,size(activation_score,2));
+mode = {'FC'}
+P = zeros(length(mode),size(activation_score,2));
+R = zeros(length(mode),size(activation_score,2));
 
 thr = zeros(1,length(mode));
 
-for imod = 1 : length(mode)
+for imod = 2
     beta = beta_all.(mode{imod}).beta;
 
     for iterm = 1 : size(activation_score,2)
@@ -31,6 +32,7 @@ for imod = 1 : length(mode)
 end
 
 save Result\S203_Corr_cognation\corr_cognation_slem.mat P R thr terms
+
 
 fc_p = P(2,:); fc_r = R(2,:); fc_thr = thr(2);
 sig_pos_term = terms(and(fc_p<=fc_thr, fc_r>0)); sig_pos_r = fc_r(and(fc_p<=fc_thr, fc_r>0));

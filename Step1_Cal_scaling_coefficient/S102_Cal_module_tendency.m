@@ -1,5 +1,5 @@
 clear;
-cd D:\Projects\Allo_Scaling\
+cd E:\Projects\Allo_Scaling\
 
 load Data\Beta\beta_deg_hcp.mat
 load Data\Spin_rotation\Schaefer400_rotation.mat
